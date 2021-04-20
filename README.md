@@ -1,2 +1,3 @@
 # dum-bot
-yes
+A Discord Bot Made in python
+
