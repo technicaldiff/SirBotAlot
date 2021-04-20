@@ -1,0 +1,2 @@
+# dum-bot
+yes
