@@ -1,32 +1,58 @@
-from mcstatus import MinecraftServer
+import requests
 from discord.ext import commands
 import discord
 
 
-
-
 class Mcstatus(commands.Cog):
     """
-       Currently works with user input cannot ping servers with lots of players
-       still under close watch
+       Completed but still in beta bugs inform to Technical_difficulty#6957
     """
 
     def __init__(self, bot):
-        self.bot = bot\
+        self.bot = bot
 
     @commands.command(pass_context=True)
     async def mcstatus(self, ctx, arg):
-        server = MinecraftServer.lookup(arg)
-        status = server.status()
-        em = discord.Embed(title="Minecraft Server status for {0}".format(arg),colour=discord.Colour.blurple())
-        em.add_field(name="server status",value="The server has {0} players".format(status.players.online))
-        latency = server.ping()
-        em.add_field(name="ping",value="server replied in {0} ms".format(latency))
-        usersConnected = [user['name'] for user in status.raw['players']['sample']]
-        em.add_field(name="Players online", value=usersConnected)
-        await ctx.send(embed=em)
+        serverdata = arg
+        data = requests.get(f"https://eu.mc-api.net/v3/server/ping/{serverdata}").json()
+        motdto = requests.get(f"https://api.mcsrvstat.us/2/{serverdata}").json()
+        embed = discord.Embed(title="Server status", colour=discord.Colour.blurple())
+        try:
+            embed.add_field(name="Status", value=f"{motdto['online']} :green_circle:")
+        except:
+            embed.add_field(name="Status", value="Offline :red_circle:")
+        try:
+            embed.add_field(name="Players online", value=f"{data['players']['online']} / {data['players']['max']}")
+        except:
+            embed.add_field(name="Players online", value="Failed")
+        try:
+            embed.add_field(name="Latency", value=f"{data['took']} ms")
+        except:
+            embed.add_field(name="Latency", value="Failed")
+
+        try:
+            embed.add_field(name="Version", value=f"{data['version']['name']}")
+        except:
+            embed.add_field(name="Version", value="Failed")
+
+        try:
+            embed.add_field(name="Motd", value=f"{motdto['motd']['clean']}")
+        except:
+            embed.add_field(name="Motd", value="Failed")
+
+        try:
+            embed.add_field(name="Player Names", value=f"{motdto['players']['list']}")
+        except:
+            embed.add_field(name="Player Names", value="Failed")
+
+        try:
+            embed.set_thumbnail(url=f"{data['favicon']}")
+        except:
+            embed.set_thumbnail(value="Failed")
+        await ctx.send(embed=embed)
 
 
 def setup(bot):
     bot.add_cog(Mcstatus(bot))
     print("Mcstatus cog loaded Successfully")
+
