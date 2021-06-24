@@ -1,3 +1,3 @@
-# dum-bot
+# SirBotALot
 A Discord Bot Made in python
 
