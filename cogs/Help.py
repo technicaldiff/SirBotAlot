@@ -10,6 +10,7 @@ Rewritten and optimized by github.com/nonchris
 https://gist.github.com/nonchris/1c7060a14a9d94e7929aa2ef14c41bc2
 You need to set three variables to make that cog run.
 Have a look at line 51 to 57
+...
 """
 
 
