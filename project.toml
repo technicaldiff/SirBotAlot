@@ -1,8 +1,8 @@
 [[build.buildpacks]]
-uri = "https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz"
+uri = "heroku/https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
 
 [[build.buildpacks]]
 uri = "heroku/python"
 
 [[build.buildpacks]]
-uri = "https://github.com/xrisk/heroku-opus"
+uri = "heroku/https://github.com/xrisk/heroku-opus"
